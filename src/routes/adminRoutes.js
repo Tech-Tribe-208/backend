@@ -39,7 +39,7 @@ adminRouter.post('/signup', async (req, res) => {
 adminRouter.post('/login', async (req, res) => {
     try{
         const {username, password} = req.body;
-        const admin = await Admin.findOne({username});
+        const admin = await Admin.findOne({username}).select('+password');
         if(admin){
             if(bcrypt.compareSync(password, admin.password)){
                 res.status(200).json({responseCode: '200', responseMessage: 'Admin login successful'})

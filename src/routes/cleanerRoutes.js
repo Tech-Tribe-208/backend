@@ -11,7 +11,7 @@ cleanerRouter.post('/login', async (req, res) => {
     try{
         console.log('we\'re in the try block');
         const {username, password} = req.body;
-        const cleaner = await Cleaner.findOne({username});
+        const cleaner = await Cleaner.findOne({username}).select('+password');
         if(cleaner){
             console.log('we\'ve found the cleaner');
             if(bcrypt.compareSync(password, cleaner.password)){

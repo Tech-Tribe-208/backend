@@ -41,7 +41,7 @@ customerRouter.post('/login', async (req, res) => {
     try{
         console.log('we\'re in the try block');
         const {username, password} = req.body;
-        const customer = await Customer.findOne({username});
+        const customer = await Customer.findOne({username}).select('+password');
         if(customer){
             console.log('we\'ve found the customer');
             if(bcrypt.compareSync(password, customer.password)){
