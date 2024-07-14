@@ -8,8 +8,9 @@ adminRouter.use(express.json());
 
 const Admin = require('../models/admin');
 const Cleaner = require('../models/cleaner');
+const Customer = require('../models/customer');
 
-
+// Admin signup
 adminRouter.post('/signup', async (req, res) => {
     try{
         const {username, fullName, password, password2, email} = req.body;
@@ -34,6 +35,7 @@ adminRouter.post('/signup', async (req, res) => {
     }
 });
 
+// Admin login
 adminRouter.post('/login', async (req, res) => {
     try{
         const {username, password} = req.body;
@@ -56,6 +58,7 @@ adminRouter.post('/login', async (req, res) => {
     }
 });
 
+// Create a cleaner
 adminRouter.post('/create-cleaner', async (req, res) => {
     try{
         const {username, fullName, password, password2, email} = req.body;
@@ -72,6 +75,64 @@ adminRouter.post('/create-cleaner', async (req, res) => {
         }
         else{
             res.status(409).json({responseCode: '300', responseMessage: 'Cleaner already exists in the database'})
+        }
+    }
+    catch(error){
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    }
+});
+
+// Get all cleaners
+adminRouter.get('/cleaners', async (req, res) => {
+    try{
+        res.status(200).json({responseCode: '200', responseMessage: 'Cleaners found', cleaners: await Cleaner.find()})
+    }
+    catch(error){
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    }
+});
+
+// Get a cleaner by id
+adminRouter.get('/cleaners/:id', async (req, res) => {
+    try{
+        const cleanerId = req.params.id;
+        const cleaner = await Cleaner.findById(cleanerId);
+        if(cleaner){
+            res.status(200).json({responseCode: '200', responseMessage: 'Cleaner found', cleaner})
+        }
+        else{
+            res.status(404).json({responseCode: '404', responseMessage: 'Cleaner not found'})
+        }
+    }
+    catch(error){
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    }
+});
+
+// Get all customers
+adminRouter.get('/customers', async (req, res) => {
+    try{
+        res.status(200).json({responseCode: '200', responseMessage: 'Customers found', cleaners: await Customer.find()})
+    }
+    catch(error){
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    }
+});
+
+// Get a customer by id
+adminRouter.get('/customers/:id', async (req, res) => {
+    try{
+        const customerId = req.params.id;
+        const customer = await Customer.findById(customerId);
+        if(customer){
+            res.status(200).json({responseCode: '200', responseMessage: 'Customer found', customer})
+        }
+        else{
+            res.status(404).json({responseCode: '404', responseMessage: 'Customer not found'})
         }
     }
     catch(error){
