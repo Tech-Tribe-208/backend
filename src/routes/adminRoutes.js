@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 const express = require('express');
 const bcrypt = require('bcrypt');
 
-const router = express.Router();
+const adminRoutes = express.Router();
 
-router.use(express.json());
+adminRoutes.use(express.json());
 
 const Admin = require('../models/admin');
 const Cleaner = require('../models/cleaner');
 
-// admin
-router.post('/admin/signup', async (req, res) => {
+
+adminRoutes.post('/signup', async (req, res) => {
     try{
         const {username, fullName, password, password2, email} = req.body;
         const existingAdmin = await Admin.findOne({username});
@@ -34,7 +34,7 @@ router.post('/admin/signup', async (req, res) => {
     }
 });
 
-router.post('/admin/login', async (req, res) => {
+adminRoutes.post('/login', async (req, res) => {
     try{
         const {username, password} = req.body;
         const admin = await Admin.findOne({username});
@@ -56,7 +56,7 @@ router.post('/admin/login', async (req, res) => {
     }
 });
 
-router.post('/admin/create-cleaner', async (req, res) => {
+adminRoutes.post('/create-cleaner', async (req, res) => {
     try{
         const {username, fullName, password, password2, email} = req.body;
         const existingClener = await Cleaner.findOne({username});
@@ -80,4 +80,4 @@ router.post('/admin/create-cleaner', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = adminRoutes;
