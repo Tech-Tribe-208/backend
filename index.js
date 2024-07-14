@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./src/database/database');
 const adminRouter = require('./src/routes/adminRoutes');
+const cleanerRouter = require('./src/routes/cleanerRoutes');
 
 const app = express();
 
@@ -13,6 +14,7 @@ const port = 3000;
 
 // Routes
 app.use('/admin', adminRouter);
+app.use('/cleaner', cleanerRouter);
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
