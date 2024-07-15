@@ -9,6 +9,7 @@ adminRouter.use(express.json());
 const Admin = require('../models/admin');
 const Cleaner = require('../models/cleaner');
 const Customer = require('../models/customer');
+const Service = require('../models/service');
 
 // Admin signup
 adminRouter.post('/signup', async (req, res) => {
@@ -138,6 +139,58 @@ adminRouter.get('/customers/:id', async (req, res) => {
     catch(error){
         res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
         console.error(error);
+    }
+});
+
+// Create a service
+adminRouter.post('/services', async (req, res) => {
+    try{
+        const {name, category, price} = req.body;
+        const existingService = await Service.findOne({name});
+        if(!existingService){
+            const newService = new Service({name, category, price});
+            await newService.save();
+            res.status(200).json({responseCode: '200', responseMessage: 'Service created successfully'});
+        }
+        else{
+            res.status(409).json({responseCode: '300', responseMessage: 'Service already exists in the database'})
+        }
+    }
+    catch(error){
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    
+    }
+});
+
+// Get all services
+adminRouter.get('/services', async (req, res) => {
+    try{
+        res.status(200).json({responseCode: '200', responseMessage: 'Services found', services: await Service.find()})
+    }
+    catch(error){
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    
+    }
+});
+
+// Get a service by id
+adminRouter.get('/services/:id', async (req, res) => {
+    try{
+        const serviceId = req.params.id;
+        const service = await Service.findById(serviceId);
+        if(service){
+            res.status(200).json({responseCode: '200', responseMessage: 'Service found', service})
+        }
+        else{
+            res.status(404).json({responseCode: '404', responseMessage: 'Service not found'})
+        }
+    }
+    catch(error){
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    
     }
 });
 
