@@ -5,6 +5,7 @@ const customerRouter = express.Router();
 customerRouter.use(express.json());
 
 const Customer = require('../models/customer');
+const Booking = require('../models/booking');
 
 customerRouter.post('/signup', async (req, res) => {
     try{
@@ -62,6 +63,29 @@ customerRouter.post('/login', async (req, res) => {
         res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
         console.error(err);
     }
-})
+});
+
+customerRouter.post('/bookings', async (req, res) => {
+    try{
+        console.log('we\'re in the try block');
+        const {bookingId, date, time, status} = req.body;
+        const existingBooking = await Booking.findOne({bookingId});
+        if(!existingBooking){
+            console.log('booking does not exist so we\'re creating a new one');
+            const newBooking = new Booking({bookingId, date, time, status});
+            await newBooking.save();
+            res.status(200).json({responseCode: '200', responseMessage: 'Booking created successfully', responseData: newBooking});
+        }
+        else{
+            console.log(`an existing booking was found so we can\'t create a new one ${existingBooking}`)
+            res.status(409).json({responseCode: '409', responseMessage: 'Booking already exists in the database'});
+        }
+    }
+    catch(error){
+        console.log('we\'re in the catch block');
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    }
+});
 
 module.exports = customerRouter;
