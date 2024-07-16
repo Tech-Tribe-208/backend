@@ -10,6 +10,7 @@ const Admin = require('../models/admin');
 const Cleaner = require('../models/cleaner');
 const Customer = require('../models/customer');
 const Service = require('../models/service');
+const Booking = require('../models/booking');
 
 // Admin signup
 adminRouter.post('/signup', async (req, res) => {
@@ -193,5 +194,32 @@ adminRouter.get('/services/:id', async (req, res) => {
     
     }
 });
+
+// Get all bookings
+adminRouter.get('/bookings', async (req, res) => {
+    try{
+        res.status(200).json({responseCode: '200', responseMessage: 'Bookings found', bookings: await Booking.find()});
+    }
+    catch(error){
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+    }
+});
+
+// Get a booking by ID
+adminRouter.get('/bookings/:id', async (req, res) => {
+    try{
+        const bookingID = req.params.id;
+        const booking = Booking.findById(bookingID);
+        if(booking){
+            res.status(200).json({responseCode: '200', responseMessage: 'Booking found', responseData: booking})
+        }
+        else{
+            res.status(404).json({responseCode: '404', responseMessage: 'Booking not found'})
+        }
+    }
+    catch{
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+    }
+})
 
 module.exports = adminRouter;
