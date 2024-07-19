@@ -5,6 +5,7 @@ const cleanerRouter = express.Router();
 cleanerRouter.use(express.json());
 
 const Cleaner = require('../models/cleaner');
+const Booking = require('../models/booking');
 
 
 cleanerRouter.post('/login', async (req, res) => {
@@ -32,5 +33,16 @@ cleanerRouter.post('/login', async (req, res) => {
         console.error(error);
     }
 });
+
+cleanerRouter.get('/bookings', async (req, res) => {
+    try{
+        console.log('we\'re in the try block');
+        res.status(200).json({responseCode: '200', responseMessage: 'Bookings found', bookings: await Booking.find()});
+    }
+    catch(error){
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    }
+})
 
 module.exports = cleanerRouter;
