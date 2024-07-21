@@ -62,7 +62,7 @@ cleanerRouter.patch('/bookings/:bookingId', async (req, res) => {
     try{
         console.log('we\'re in the try block');
         const {bookingId} = req.params;
-        const {bookingStatus} = req.body;
+        const {bookingStatus, cleanerId} = req.body;
         const booking = await Booking.findOne({bookingId});
         if(booking){
             console.log('we\'ve found the booking');
@@ -75,9 +75,18 @@ cleanerRouter.patch('/bookings/:bookingId', async (req, res) => {
                 console.log('booking status cannot be updated');
                 return res.status(400).json({ responseCode: '400', responseMessage: 'Booking status cannot be updated' });
             }
-            booking.bookingStatus = bookingStatus;
-            await booking.save();
-            res.status(200).json({responseCode: '200', responseMessage: 'Booking status updated', responseData: booking});
+            if(bookingStatus == 'accepted'){
+                console.log('we\'re in the accepted block');
+                booking.bookingStatus = bookingStatus;
+                booking.cleanerId = cleanerId;
+                await booking.save();
+                res.status(200).json({responseCode: '200', responseMessage: 'Booking status updated', responseData: booking});
+            } 
+            else{
+                booking.bookingStatus = bookingStatus;
+                await booking.save();
+                res.status(200).json({responseCode: '200', responseMessage: 'Booking status updated', responseData: booking});
+            }
         }
         else{
             console.log('we didn\'t find the booking');
