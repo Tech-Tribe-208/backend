@@ -99,4 +99,22 @@ cleanerRouter.patch('/bookings/:bookingId', async (req, res) => {
     }
 })
 
+cleanerRouter.get('/schedule/:cleanerId', async (req, res) => {
+    try{
+        const cleanerId = req.params.cleanerId;
+        const schedule = await Booking.find({cleanerId: cleanerId});
+        console.log('we\'re in the try block');
+        if(schedule == null){
+            console.log('Cleaner has no scheduled jobs');
+            return res.status(404).json({responseCode: '404', responseMessage: 'Cleaner has no scheduled jobs'});
+        }
+        res.status(200).json({responseCode: '200', responseMessage: 'Schedule found', schedule: schedule});
+    }
+    catch(error){
+        console.log('we ran into an error so we\'re in the catch block');
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    }
+})
+
 module.exports = cleanerRouter;
