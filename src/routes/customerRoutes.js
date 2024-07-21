@@ -6,6 +6,7 @@ customerRouter.use(express.json());
 
 const Customer = require('../models/customer');
 const Booking = require('../models/booking');
+const Cleaner = require('../models/cleaner');
 
 customerRouter.post('/signup', async (req, res) => {
     try{
@@ -87,5 +88,29 @@ customerRouter.post('/bookings', async (req, res) => {
         console.error(error);
     }
 });
+
+customerRouter.patch('/ratings/:cleanerId', async (req, res) => {
+    try{
+        console.log('we\'re in the try block');
+        const cleanerId = req.params.cleanerId;
+        const customerRatingOfCleaner = req.body.rating;
+        const cleaner = await Cleaner.findById(cleanerId);
+        if(cleaner){
+            console.log('we\'ve found the cleaner');
+            cleaner.rating = ((cleaner.rating * cleaner.numberOfRatings) + customerRatingOfCleaner) / (cleaner.numberOfRatings + 1);
+            cleaner.numberOfRatings += 1;
+            await cleaner.save();
+            res.status(200).json({responseCode: '200', responseMessage: 'Rating updated successfully'});
+        }
+        else{
+            console.log('we didn\'t find the cleaner');
+            res.status(404).json({responseCode: '404', responseMessage: 'Cleaner not found'});
+        }
+    }
+    catch(error){
+        console.log('we\'re in the catch block');
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+    }
+})
 
 module.exports = customerRouter;
