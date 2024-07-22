@@ -6,7 +6,8 @@ cleanerRouter.use(express.json());
 
 const Cleaner = require('../models/cleaner');
 const Booking = require('../models/booking');
-
+const Payment = require('../models/payment');
+const Service = require('../models/service');
 
 cleanerRouter.post('/login', async (req, res) => {
     try{
@@ -81,6 +82,17 @@ cleanerRouter.patch('/bookings/:bookingId', async (req, res) => {
                 booking.cleanerId = cleanerId;
                 await booking.save();
                 res.status(200).json({responseCode: '200', responseMessage: 'Booking status updated', responseData: booking});
+            }
+            else if(bookingStatus == 'in progress'){
+                console.log('booking service in progress');
+                booking.bookingStatus = bookingStatus;
+                const bookingServiceId = booking.serviceId;
+                const bookingService = await Service.findOne({_id: bookingServiceId});
+                const bookingServicePrice = bookingService.price;
+                const newPayment = new Payment({bookingId: bookingId, amount: bookingServicePrice, date: Date.now(), paymentMethod: 'cash', paymentStatus: 'pending'});
+                await newPayment.save();
+                await booking.save();
+                res.status(200).json({responseCode: '200', responseMessage: 'Service in progress', responseData: booking})
             } 
             else{
                 booking.bookingStatus = bookingStatus;
