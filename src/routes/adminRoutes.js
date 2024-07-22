@@ -208,8 +208,8 @@ adminRouter.get('/bookings', async (req, res) => {
 // Get a booking by ID
 adminRouter.get('/bookings/:id', async (req, res) => {
     try{
-        const bookingID = req.params.id;
-        const booking = Booking.findById(bookingID);
+        const bookingId = req.params.id;
+        const booking = await Booking.findOne({bookingId});
         if(booking){
             res.status(200).json({responseCode: '200', responseMessage: 'Booking found', responseData: booking})
         }
