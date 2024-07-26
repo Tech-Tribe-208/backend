@@ -1,7 +1,6 @@
 const express = require('express');
 const connectDB = require('./src/database/database');
 const adminRouter = require('./src/routes/adminRoutes');
-const cleanerRouter = require('./src/routes/cleanerRoutes');
 const customerRouter = require('./src/routes/customerRoutes');
 
 const app = express();
@@ -15,7 +14,6 @@ const port = 3000;
 
 // Routes
 app.use('/admin', adminRouter);
-app.use('/cleaner', cleanerRouter);
 app.use('/customer', customerRouter);
 
 app.listen(port, () => {
