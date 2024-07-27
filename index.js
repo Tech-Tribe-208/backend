@@ -3,9 +3,13 @@ const connectDB = require('./src/database/database');
 const adminRouter = require('./src/routes/adminRoutes');
 const customerRouter = require('./src/routes/customerRoutes');
 
+const path = require('path');
+
 const app = express();
 
 connectDB();
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
 
