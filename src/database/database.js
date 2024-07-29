@@ -1,8 +1,13 @@
-const mongoose = require('mongoose');
+var mongoClient = require("mongodb").MongoClient;
+require('dotenv').config();
+
+const connectionString = process.env.MONGODB_CONNECTION_STRING;
 
 const connectDB = async () =>{
     try{
-        await mongoose.connect('mongodb://127.0.0.1:27017/cleaning-services-syst-db');
+        mongoClient.connect(connectionString, function (err, db) {
+        db.close();
+        });
         console.log("Successfully connected to MongoDB.");
     }
     catch(err){
