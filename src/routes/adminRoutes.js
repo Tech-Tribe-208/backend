@@ -15,7 +15,7 @@ const Booking = require('../models/booking');
 // Admin signup
 adminRouter.post('/signup', async (req, res) => {
     try{
-        const {username, fullName, password, password2, email, phoneNumber} = req.body;
+        const {fullName, password, password2, email, phoneNumber} = req.body;
         const existingAdmin = await Admin.findOne({username});
         if(!existingAdmin){
             if(password == password2){
