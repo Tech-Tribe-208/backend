@@ -69,11 +69,11 @@ customerRouter.post('/login', async (req, res) => {
 customerRouter.post('/bookings', async (req, res) => {
     try{
         console.log('we\'re in the try block');
-        const {bookingId, customerId, serviceId, date, bookingStatus} = req.body;
+        const {bookingId, customerId, serviceId, date, duration, bookingStatus} = req.body;
         const existingBooking = await Booking.findOne({bookingId});
         if(!existingBooking){
             console.log('booking does not exist so we\'re creating a new one');
-            const newBooking = new Booking({bookingId, customerId, serviceId, date, bookingStatus});
+            const newBooking = new Booking({bookingId, customerId, serviceId, date, duration, bookingStatus});
             await newBooking.save();
             res.status(200).json({responseCode: '200', responseMessage: 'Booking created successfully', responseData: newBooking});
         }
