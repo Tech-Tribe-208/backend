@@ -15,11 +15,11 @@ const Booking = require('../models/booking');
 // Admin signup
 adminRouter.post('/signup', async (req, res) => {
     try{
-        const {username, fullName, password, password2, email} = req.body;
+        const {username, fullName, password, password2, email, phoneNumber} = req.body;
         const existingAdmin = await Admin.findOne({username});
         if(!existingAdmin){
             if(password == password2){
-                const newAdmin = new Admin({username, fullName, password: bcrypt.hashSync(password, 8), email});
+                const newAdmin = new Admin({username, fullName, password: bcrypt.hashSync(password, 8), email, phoneNumber});
                 await newAdmin.save();
                 res.status(200).json({responseCode: '200', responseMessage: 'Admin created successfully'});
             }
@@ -63,11 +63,11 @@ adminRouter.post('/login', async (req, res) => {
 // Create a cleaner
 adminRouter.post('/create-cleaner', async (req, res) => {
     try{
-        const {username, fullName, password, password2, email} = req.body;
+        const {username, fullName, password, password2, email, phoneNumber} = req.body;
         const existingClener = await Cleaner.findOne({username});
         if(!existingClener){
             if(password == password2){
-                const newCleaner = new Cleaner({username, fullName, password: bcrypt.hashSync(password, 8), email});
+                const newCleaner = new Cleaner({username, fullName, password: bcrypt.hashSync(password, 8), email, phoneNumber});
                 await newCleaner.save();
                 res.status(200).json({responseCode: '200', responseMessage: 'Cleaner created successfully'});
             }
