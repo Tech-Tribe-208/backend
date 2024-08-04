@@ -11,14 +11,14 @@ const Cleaner = require('../models/cleaner');
 customerRouter.post('/signup', async (req, res) => {
     try{
         console.log('we\'re in the try block');
-        const {username, fullName, password, password2, email} = req.body;
+        const {username, fullName, password, password2, email, phoneNumber} = req.body;
         const existingCustomer = await Customer.findOne({ $or: [{ username }, { email }] });
 
         if(!existingCustomer){
             console.log('we didn\'t find an existing customer so we\'re creating a new customer');
             if(password == password2){
                 console.log('passwords match');
-                const newCustomer = new Customer({username, fullName, password: bcrypt.hashSync(password, 8), email});
+                const newCustomer = new Customer({username, fullName, password: bcrypt.hashSync(password, 8), email, phoneNumber});
                 await newCustomer.save();
                 res.status(200).json({responseCode: '200', responseMessage: 'Customer created successfully'});
             }
