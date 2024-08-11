@@ -6,6 +6,7 @@ const customerSchema = new mongoose.Schema({
   password: { type: String, required: true, select: false },
   email: { type: String, required: true, unique: true },
   phoneNumber: { type: String, required: true },
+  numberOfBookings: { type: Number, required: false, default: 0},
 });
 
 const Customer = mongoose.model('Customer', customerSchema);
