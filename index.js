@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8080;
 
 const checkPort = async (port) => {
     if (port === undefined) {
