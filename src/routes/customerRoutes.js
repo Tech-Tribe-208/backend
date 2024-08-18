@@ -69,7 +69,7 @@ customerRouter.post('/login', async (req, res) => {
 customerRouter.post('/bookings', async (req, res) => {
     try{
         console.log('we\'re in the try block');
-        const {bookingId, customerId, serviceId, date, duration, bookingStatus} = req.body;
+        const {bookingId, customerId, date, duration, bookingStatus} = req.body;
         const existingBooking = await Booking.findOne({bookingId});
         const customer = await Customer.findById(customerId);
         if(!existingBooking){
