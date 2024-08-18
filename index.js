@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const connectDB = require('./src/database/database');
 const adminRouter = require('./src/routes/adminRoutes');
 const customerRouter = require('./src/routes/customerRoutes');
@@ -13,6 +14,11 @@ connectDB();
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
+
+app.use(cors({
+    origin: process.env.ALLOWED_CLIENTS === '*' ? process.env.ALLOWED_CLIENTS: process.env.ALLOWED_CLIENTS.split(','),
+    credentials: true
+}));
 
 const port = process.env.PORT || 8080;
 
