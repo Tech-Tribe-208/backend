@@ -198,7 +198,10 @@ adminRouter.get('/services/:id', async (req, res) => {
 // Get all bookings
 adminRouter.get('/bookings', async (req, res) => {
     try{
-        res.status(200).json({responseCode: '200', responseMessage: 'Bookings found', bookings: await Booking.find()});
+        const bookings = await Booking.find()
+            .populate('customerId', 'fullName') // Populate customerId with the customer's fullName
+            .exec();
+        res.status(200).json({responseCode: '200', responseMessage: 'Bookings found', bookings: bookings});
     }
     catch(error){
         res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
