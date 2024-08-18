@@ -8,6 +8,7 @@ const cleanerSchema = new mongoose.Schema({
   rating: { type: Number, default: 5.0 },
   phoneNumber: { type: String, required: true },
   numberOfRatings: { type: Number, default: 0 },
+  available: { type: Boolean, default: true}
 });
 
 const Cleaner = mongoose.model('Cleaner', cleanerSchema);
