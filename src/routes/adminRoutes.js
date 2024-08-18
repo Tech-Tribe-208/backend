@@ -222,4 +222,27 @@ adminRouter.get('/bookings/:id', async (req, res) => {
     }
 })
 
+adminRouter.post('/bookings', async (req, res) => {
+    try{
+        const {bookingId, cleanerId} = req.body;
+        const booking = await Booking.findOne({bookingId});
+        const cleaner = await Cleaner.findById(cleanerId);
+        if(booking && cleaner){
+            booking.cleanerId = cleanerId;
+            booking.bookingStatus = 'assigned';
+            await booking.save();
+            cleaner.available = false;
+            await cleaner.save();
+            res.status(200).json({responseCode: '200', responseMessage: 'Cleaner assigned successfully'});
+        }
+        else{
+            res.status(404).json({responseCode: '404', responseMessage: 'Booking or cleaner not found'});
+        }
+    }
+    catch(error){
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    }
+});
+
 module.exports = adminRouter;

@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/3fc8ca1c-a03b-42ed-bef4-3ad901520bcf/resourceGroups/CleaningServicesSyst-rg/providers/Microsoft.Web/sites/cleaning-services-system-backend",
+    "appService.deploySubpath": "."
+}
