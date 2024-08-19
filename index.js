@@ -1,4 +1,9 @@
-require('dotenv').config();
+try{
+    require('dotenv').config();
+}
+catch(error){
+    console.error('Error: ', error);
+}
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./src/database/database');
@@ -16,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 app.use(cors({
-    origin: process.env.ALLOWED_CLIENTS === '*' ? process.env.ALLOWED_CLIENTS: process.env.ALLOWED_CLIENTS.split(','),
+    origin: process.env.ALLOWED_CLIENTS === '*',
     credentials: true
 }));
 
