@@ -11,7 +11,7 @@ const Cleaner = require('../models/cleaner');
 customerRouter.post('/signup', async (req, res) => {
     try{
         console.log('we\'re in the try block');
-        const {fullName, password, password2, email, phoneNumber} = req.body;
+        const {fullName, password, password2, email, phoneNumber, username} = req.body;
         const existingCustomer = await Customer.findOne({ $or: [{ username }, { email }] });
 
         if(!existingCustomer){
