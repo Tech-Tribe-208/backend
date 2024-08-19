@@ -248,4 +248,17 @@ adminRouter.post('/bookings', async (req, res) => {
     }
 });
 
+adminRouter.get('/statistics', async (req, res) => {
+    try{
+        const numberOfCleaners = await Cleaner.countDocuments();
+        const numberOfCustomers = await Customer.countDocuments();
+        const numberOfBookings = await Booking.countDocuments();
+        res.status(200).json({responseCode: '200', responseMessage: 'Statistics found', responseData: {numberOfCleaners, numberOfCustomers, numberOfBookings}});
+    }
+    catch(error){
+        res.status(500).json({responseCode: '101', responseMessage: 'fatal error'});
+        console.error(error);
+    }
+});
+
 module.exports = adminRouter;
